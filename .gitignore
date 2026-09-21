@@ -9,3 +9,6 @@ id_*
 *.db
 .DS_Store
 node_modules/
+# Local AI runtime state
+.atl/
+.atl/
