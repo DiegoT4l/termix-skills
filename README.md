@@ -23,16 +23,25 @@ Each skill keeps its body short and pushes detail into `references/`:
 
 ## Install
 
-The repo is the source of truth; skills enter Claude Code by symlink.
-
 ```bash
-git clone git@github.com:DiegoT4l/termix-skills.git ~/Projects/termix-skills
-for s in termix-ssh termix-provisioning termix-fleet-ops; do
-  ln -s ~/Projects/termix-skills/skills/$s ~/.claude/skills/$s
-done
+git clone https://github.com/DiegoT4l/termix-skills.git
+cd termix-skills && ./install.sh
 ```
 
-Skill discovery resolves symlinks.
+`install.sh` symlinks the skills into every known skill directory that already
+exists on the machine (Claude Code, Copilot, and others). Symlinks mean a
+`git pull` updates every agent at once.
+
+```
+./install.sh --dir PATH    install into a runtime the script does not know
+./install.sh --copy        copy instead of symlinking
+./install.sh --list        preview, change nothing
+./install.sh --uninstall   undo
+```
+
+**Agents without a skill system** (opencode, Codex, and others): point them at
+[`AGENTS.md`](AGENTS.md). The skills are plain Markdown and can be read directly,
+with no runtime dependency.
 
 ## Why these exist
 
@@ -48,6 +57,13 @@ These skills encode what the documentation does not:
 - `hosts export` emits **decrypted credentials**.
 - The CLI has no Proxmox support; discovery and import are web-UI only, and the
   import fails for every guest unless the key was distributed first.
+
+## For AI agents
+
+[`AGENTS.md`](AGENTS.md) is the agent-facing entry point: install paths, which
+file to load for which task, and the safety rules that apply regardless of
+runtime — chiefly that `hosts export` emits decrypted credentials and that
+passwords must never be passed in `argv`.
 
 ## Licence
 
